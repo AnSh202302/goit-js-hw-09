@@ -6,6 +6,7 @@ formEl.addEventListener('click', onClick);
 
 function onClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
+
   e.preventDefault();
   let delay = Number(formEl.delay.value);
   for (let i = 1; i <= formEl.amount.value; i += 1) {
@@ -16,21 +17,22 @@ function onClick(e) {
       .catch(({ position, delay }) => {
         Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
+    console.log(delay);
     delay += Number(formEl.step.value);
   }
 }
 
 function createPromise(position, delay) {
+  const obj = { position, delay };
   const shouldResolve = Math.random() > 0.3;
 
   return new Promise((resolve, reject) => {
-    const obj = { position, delay };
     setTimeout(() => {
       if (shouldResolve) {
         resolve(obj);
       } else {
         reject(obj);
       }
-    });
-  }, delay);
+    }, delay);
+  });
 }
